@@ -7,7 +7,11 @@ SRC = src/main.c \
       src/parser.c \
       src/parser_check.c \
       src/parser_validate.c \
-      src/error.c
+      src/error.c \
+      src/init_dongles.c \
+      src/init_coders.c \
+      src/init_program.c \
+      src/destroy.c
 
 OBJ = $(SRC:.c=.o)
 

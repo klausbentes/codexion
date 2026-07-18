@@ -6,37 +6,34 @@
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/18 02:58:58 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/07/18 04:01:44 by kbentes-         ###   ########.fr       */
+/*   Updated: 2026/07/18 05:32:26 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-static void	print_config(t_config *cfg)
+static void	print_program_info(t_program *program)
 {
-	printf("number_of_coders: %d\n", cfg->number_of_coders);
-	printf("time_to_burnout: %ld\n", cfg->time_to_burnout);
-	printf("time_to_compile: %ld\n", cfg->time_to_compile);
-	printf("time_to_debug: %ld\n", cfg->time_to_debug);
-	printf("time_to_refactor: %ld\n", cfg->time_to_refactor);
-	printf("number_of_compiles_required: %d\n",
-		cfg->number_of_compiles_required);
-	printf("dongle_cooldown: %ld\n", cfg->dongle_cooldown);
-	if (cfg->scheduler == FIFO_SCHED)
-		printf("scheduler: fifo\n");
-	else
-		printf("scheduler: edf\n");
+	printf("Program initialized with %d coders and %d dongles\n",
+		program->config.number_of_coders, program->config.number_of_coders);
 }
 
 int	main(int argc, char **argv)
 {
-	t_config	cfg;
+	t_config	config;
+	t_program	program;
 
-	if (parse_args(argc, argv, &cfg) == -1)
+	if (parse_args(argc, argv, &config) == -1)
 	{
 		print_usage();
 		return (1);
 	}
-	print_config(&cfg);
+	if (init_program(&program, &config) == -1)
+	{
+		print_error("failed to initialize program");
+		return (1);
+	}
+	print_program_info(&program);
+	destroy_program(&program);
 	return (0);
 }
