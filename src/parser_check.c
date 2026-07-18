@@ -6,7 +6,7 @@
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/18 02:50:08 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/07/18 03:57:59 by kbentes-         ###   ########.fr       */
+/*   Updated: 2026/07/18 04:12:32 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	is_all_digits(const char *str)
 	int	i;
 
 	i = 0;
+	if (str[i] == '+')
+		i++;
 	if (str[i] == '\0')
 		return (0);
 	while (str[i])
@@ -36,6 +38,8 @@ long	str_to_long(const char *str, int *err)
 	result = 0;
 	i = 0;
 	*err = 0;
+	if (str[i] == '+')
+		i++;
 	while (str[i])
 	{
 		if (result > (LONG_MAX - (str[i] - '0')) / 10)
