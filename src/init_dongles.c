@@ -6,15 +6,18 @@
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/18 04:24:37 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/07/18 05:30:08 by kbentes-         ###   ########.fr       */
+/*   Updated: 2026/07/29 22:45:17 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-static void	set_dongle(t_dongle *dongle, int id)
+static int	set_dongle(t_dongle *dongle, int id)
 {
 	dongle->id = id;
+	if (pthread_mutex_init(&dongle->mutex, NULL) != 0)
+		return (-1);
+	return (0);
 }
 
 int	init_dongles(t_program *program)
@@ -29,7 +32,13 @@ int	init_dongles(t_program *program)
 	i = 0;
 	while (i < n)
 	{
-		set_dongle(&program->dongles[i], i);
+		if (set_dongle(&program->dongles[i], i) == -1)
+		{
+			destroy_dongles(program, i);
+			free(program->dongles);
+			program->dongles = NULL;
+			return (-1);
+		}
 		i++;
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/29 21:38:41 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/07/29 22:19:27 by kbentes-         ###   ########.fr       */
+/*   Updated: 2026/07/29 22:44:45 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ typedef struct s_program	t_program;
 
 typedef struct s_dongle
 {
-	int	id;
+	int				id;
+	pthread_mutex_t	mutex;
 }	t_dongle;
 
 typedef struct s_coder
@@ -102,5 +103,14 @@ void		*coder_routine(void *arg);
 /* threads */
 int			create_threads(t_program *program);
 int			join_threads(t_program *program);
+
+/* init */
+int			init_dongles(t_program *program);
+int			init_coders(t_program *program);
+int			init_program(t_program *program, t_config *config);
+
+/* destroy */
+void		destroy_dongles(t_program *program, int count);
+void		destroy_program(t_program *program);
 
 #endif
