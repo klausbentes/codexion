@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   codexion.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kbentes- <kbentes-@student.42.rio>         +#+  +:+       +#+        */
+/*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/29 21:38:41 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/07/29 21:41:52 by kbentes-         ###   ########.fr       */
+/*   Updated: 2026/07/29 21:53:03 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,21 @@ typedef struct s_coder
 	t_program	*program;
 }	t_coder;
 
+typedef enum e_state
+{
+	STATE_TAKEN_DONGLE,
+	STATE_COMPILING,
+	STATE_DEBUGGING,
+	STATE_REFACTORING,
+	STATE_BURNED_OUT
+}	t_state;
+
 struct s_program
 {
 	t_config	config;
 	t_coder		*coders;
 	t_dongle	*dongles;
+	long long	start_time;
 };
 
 /* parser */
@@ -80,5 +90,8 @@ void		destroy_program(t_program *program);
 void		smart_sleep(long long ms);
 long long	get_time_ms(void);
 long long	get_elapsed_ms(long long start);
+
+/* logger */
+void		log_event(t_program *program, int coder_id, t_state state);
 
 #endif

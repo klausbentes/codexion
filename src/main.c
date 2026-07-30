@@ -6,7 +6,7 @@
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/18 02:58:58 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/07/29 21:43:03 by kbentes-         ###   ########.fr       */
+/*   Updated: 2026/07/29 22:00:38 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,17 @@ static void	print_program_info(t_program *program)
 		program->config.number_of_coders, program->config.number_of_coders);
 }
 
-static void	test_time_api(void)
+static void	test_logger(t_program *program)
 {
-	long long	start;
-	long long	now;
-
-	start = get_time_ms();
-	printf("start: %lld ms\n", start);
-	smart_sleep(250);
-	now = get_time_ms();
-	printf("now: %lld ms\n", now);
-	printf("elapsed: %lld ms\n", get_elapsed_ms(start));
+	log_event(program, 1, STATE_TAKEN_DONGLE);
+	log_event(program, 1, STATE_TAKEN_DONGLE);
+	log_event(program, 1, STATE_COMPILING);
+	smart_sleep(200);
+	log_event(program, 1, STATE_DEBUGGING);
+	smart_sleep(201);
+	log_event(program, 1, STATE_REFACTORING);
+	smart_sleep(100);
+	log_event(program, 2, STATE_BURNED_OUT);
 }
 
 int	main(int argc, char **argv)
@@ -47,7 +47,7 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	print_program_info(&program);
-	test_time_api();
+	test_logger(&program);
 	destroy_program(&program);
 	return (0);
 }

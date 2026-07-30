@@ -6,7 +6,7 @@
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/18 04:25:45 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/07/18 05:30:49 by kbentes-         ###   ########.fr       */
+/*   Updated: 2026/07/29 21:54:32 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	init_program(t_program *program, t_config *config)
 	init_config(program, config);
 	program->coders = NULL;
 	program->dongles = NULL;
+	program->start_time = get_time_ms();
 	if (init_dongles(program) == -1)
 		return (-1);
 	if (init_coders(program) == -1)

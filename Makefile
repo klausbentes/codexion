@@ -13,7 +13,8 @@ SRC = src/main.c \
       src/init_program.c \
       src/destroy.c \
       src/time.c \
-      src/time_utils.c
+      src/time_utils.c \
+      src/logger.c
 
 OBJ = $(SRC:.c=.o)
 
