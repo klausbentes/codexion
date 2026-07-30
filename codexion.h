@@ -6,6 +6,7 @@
 # include <string.h>
 # include <unistd.h>
 # include <limits.h>
+# include <sys/time.h>
 
 # define FIFO_SCHED 0
 # define EDF_SCHED 1
@@ -62,5 +63,10 @@ int		init_program(t_program *program, t_config *config);
 
 /* destroy */
 void	destroy_program(t_program *program);
+
+/* time */
+long long	get_time_ms(void);
+long long	get_elapsed_ms(long long start);
+void		smart_sleep(long long ms);
 
 #endif

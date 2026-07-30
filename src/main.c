@@ -6,7 +6,7 @@
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/18 02:58:58 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/07/18 05:32:26 by kbentes-         ###   ########.fr       */
+/*   Updated: 2026/07/29 21:17:46 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,19 @@ static void	print_program_info(t_program *program)
 {
 	printf("Program initialized with %d coders and %d dongles\n",
 		program->config.number_of_coders, program->config.number_of_coders);
+}
+
+static void	test_time_api(void)
+{
+	long long	start;
+	long long	now;
+
+	start = get_time_ms();
+	printf("start: %lld ms\n", start);
+	smart_sleep(250);
+	now = get_time_ms();
+	printf("now: %lld ms\n", now);
+	printf("elapsed: %lld ms\n", get_elapsed_ms(start));
 }
 
 int	main(int argc, char **argv)
@@ -34,6 +47,7 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	print_program_info(&program);
+	test_time_api();
 	destroy_program(&program);
 	return (0);
 }

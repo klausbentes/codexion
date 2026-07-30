@@ -11,7 +11,9 @@ SRC = src/main.c \
       src/init_dongles.c \
       src/init_coders.c \
       src/init_program.c \
-      src/destroy.c
+      src/destroy.c \
+      src/time.c \
+      src/time_utils.c
 
 OBJ = $(SRC:.c=.o)
 
