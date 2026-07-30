@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   codexion.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kbentes- <kbentes-@student.42.rio>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/29 21:38:41 by kbentes-          #+#    #+#             */
+/*   Updated: 2026/07/29 21:41:52 by kbentes-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CODEXION_H
 # define CODEXION_H
 
@@ -47,26 +59,26 @@ struct s_program
 };
 
 /* parser */
-int		is_all_digits(const char *str);
-long	str_to_long(const char *str, int *err);
-int		check_scheduler(const char *str);
-int		parse_positive(const char *str, long *out);
-int		fill_config(char **argv, t_config *cfg);
-int		parse_args(int argc, char **argv, t_config *cfg);
-void	print_usage(void);
-int		print_error(const char *msg);
+int			is_all_digits(const char *str);
+long		str_to_long(const char *str, int *err);
+int			check_scheduler(const char *str);
+int			parse_positive(const char *str, long *out);
+int			fill_config(char **argv, t_config *cfg);
+int			parse_args(int argc, char **argv, t_config *cfg);
+void		print_usage(void);
+int			print_error(const char *msg);
 
 /* init */
-int		init_dongles(t_program *program);
-int		init_coders(t_program *program);
-int		init_program(t_program *program, t_config *config);
+int			init_dongles(t_program *program);
+int			init_coders(t_program *program);
+int			init_program(t_program *program, t_config *config);
 
 /* destroy */
-void	destroy_program(t_program *program);
+void		destroy_program(t_program *program);
 
 /* time */
+void		smart_sleep(long long ms);
 long long	get_time_ms(void);
 long long	get_elapsed_ms(long long start);
-void		smart_sleep(long long ms);
 
 #endif
