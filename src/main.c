@@ -6,7 +6,7 @@
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/18 02:58:58 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/07/29 22:00:38 by kbentes-         ###   ########.fr       */
+/*   Updated: 2026/07/29 22:24:41 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,6 @@ static void	print_program_info(t_program *program)
 {
 	printf("Program initialized with %d coders and %d dongles\n",
 		program->config.number_of_coders, program->config.number_of_coders);
-}
-
-static void	test_logger(t_program *program)
-{
-	log_event(program, 1, STATE_TAKEN_DONGLE);
-	log_event(program, 1, STATE_TAKEN_DONGLE);
-	log_event(program, 1, STATE_COMPILING);
-	smart_sleep(200);
-	log_event(program, 1, STATE_DEBUGGING);
-	smart_sleep(201);
-	log_event(program, 1, STATE_REFACTORING);
-	smart_sleep(100);
-	log_event(program, 2, STATE_BURNED_OUT);
 }
 
 int	main(int argc, char **argv)
@@ -47,7 +34,18 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	print_program_info(&program);
-	test_logger(&program);
+	if (create_threads(&program) == -1)
+	{
+		print_error("failed to create threads");
+		destroy_program(&program);
+		return (1);
+	}
+	if (join_threads(&program) == -1)
+	{
+		print_error("failed to join threads");
+		destroy_program(&program);
+		return (1);
+	}
 	destroy_program(&program);
 	return (0);
 }

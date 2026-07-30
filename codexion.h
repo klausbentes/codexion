@@ -6,7 +6,7 @@
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/29 21:38:41 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/07/29 21:53:03 by kbentes-         ###   ########.fr       */
+/*   Updated: 2026/07/29 22:19:27 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <unistd.h>
 # include <limits.h>
 # include <sys/time.h>
+# include <pthread.h>
 
 # define FIFO_SCHED 0
 # define EDF_SCHED 1
@@ -46,6 +47,7 @@ typedef struct s_coder
 {
 	int			id;
 	int			compiles_done;
+	pthread_t	thread;
 	t_dongle	*left_dongle;
 	t_dongle	*right_dongle;
 	t_program	*program;
@@ -93,5 +95,12 @@ long long	get_elapsed_ms(long long start);
 
 /* logger */
 void		log_event(t_program *program, int coder_id, t_state state);
+
+/* coder */
+void		*coder_routine(void *arg);
+
+/* threads */
+int			create_threads(t_program *program);
+int			join_threads(t_program *program);
 
 #endif

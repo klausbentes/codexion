@@ -1,7 +1,7 @@
 NAME = codexion
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -I.
+CFLAGS = -Wall -Wextra -Werror -I. -pthread
 
 SRC = src/main.c \
       src/parser.c \
@@ -14,7 +14,9 @@ SRC = src/main.c \
       src/destroy.c \
       src/time.c \
       src/time_utils.c \
-      src/logger.c
+      src/logger.c \
+      src/coder.c \
+      src/threads.c
 
 OBJ = $(SRC:.c=.o)
 
