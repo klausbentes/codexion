@@ -1,37 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   destroy.c                                          :+:      :+:    :+:   */
+/*   coder_dongles.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/18 04:26:07 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/07/30 22:13:23 by kbentes-         ###   ########.fr       */
+/*   Created: 2026/07/30 22:17:21 by kbentes-          #+#    #+#             */
+/*   Updated: 2026/07/30 22:17:23 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-void	destroy_dongles(t_program *program, int count)
+void	acquire_dongles(t_coder *coder)
 {
-	int	i;
-
-	i = 0;
-	while (i < count)
-	{
-		pthread_mutex_destroy(&program->dongles[i].mutex);
-		i++;
-	}
+	pthread_mutex_lock(&coder->left_dongle->mutex);
+	log_event(coder->program, coder->id, STATE_TAKEN_DONGLE);
+	pthread_mutex_lock(&coder->right_dongle->mutex);
+	log_event(coder->program, coder->id, STATE_TAKEN_DONGLE);
 }
 
-void	destroy_program(t_program *program)
+void	release_dongles(t_coder *coder)
 {
-	free(program->coders);
-	program->coders = NULL;
-	if (program->dongles)
-	{
-		destroy_dongles(program, program->config.number_of_coders);
-		free(program->dongles);
-		program->dongles = NULL;
-	}
+	pthread_mutex_unlock(&coder->right_dongle->mutex);
+	pthread_mutex_unlock(&coder->left_dongle->mutex);
 }

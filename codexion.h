@@ -6,7 +6,7 @@
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/29 21:38:41 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/07/29 22:44:45 by kbentes-         ###   ########.fr       */
+/*   Updated: 2026/07/30 22:18:08 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,8 @@ void		log_event(t_program *program, int coder_id, t_state state);
 
 /* coder */
 void		*coder_routine(void *arg);
+void		acquire_dongles(t_coder *coder);
+void		release_dongles(t_coder *coder);
 
 /* threads */
 int			create_threads(t_program *program);
