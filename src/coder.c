@@ -6,7 +6,7 @@
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/29 22:19:47 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/07/30 22:17:37 by kbentes-         ###   ########.fr       */
+/*   Updated: 2026/07/31 19:45:31 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,9 @@ static void	do_refactor(t_coder *coder)
 void	*coder_routine(void *arg)
 {
 	t_coder	*coder;
-	int		required;
 
 	coder = (t_coder *)arg;
-	required = coder->program->config.number_of_compiles_required;
-	while (coder->compiles_done < required)
+	while (!is_simulation_stopped(coder->program))
 	{
 		do_compile(coder);
 		do_debug(coder);

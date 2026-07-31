@@ -6,7 +6,7 @@
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/29 21:38:41 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/07/30 22:18:08 by kbentes-         ###   ########.fr       */
+/*   Updated: 2026/07/31 19:44:34 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,13 @@ typedef enum e_state
 
 struct s_program
 {
-	t_config	config;
-	t_coder		*coders;
-	t_dongle	*dongles;
-	long long	start_time;
+	t_config		config;
+	t_coder			*coders;
+	t_dongle		*dongles;
+	long long		start_time;
+	pthread_t		monitor_thread;
+	pthread_mutex_t	state_mutex;
+	int				stopped;
 };
 
 /* parser */
@@ -102,9 +105,18 @@ void		*coder_routine(void *arg);
 void		acquire_dongles(t_coder *coder);
 void		release_dongles(t_coder *coder);
 
+/* state */
+int			is_simulation_stopped(t_program *program);
+void		stop_simulation(t_program *program);
+
+/* monitor */
+void		*monitor_routine(void *arg);
+
 /* threads */
 int			create_threads(t_program *program);
+int			create_monitor(t_program *program);
 int			join_threads(t_program *program);
+int			join_monitor(t_program *program);
 
 /* init */
 int			init_dongles(t_program *program);

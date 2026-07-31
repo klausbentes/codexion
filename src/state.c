@@ -1,38 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   destroy.c                                          :+:      :+:    :+:   */
+/*   state.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/18 04:26:07 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/07/31 19:46:12 by kbentes-         ###   ########.fr       */
+/*   Created: 2026/07/31 19:44:49 by kbentes-          #+#    #+#             */
+/*   Updated: 2026/07/31 19:44:51 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-void	destroy_dongles(t_program *program, int count)
+int	is_simulation_stopped(t_program *program)
 {
-	int	i;
+	int	stopped;
 
-	i = 0;
-	while (i < count)
-	{
-		pthread_mutex_destroy(&program->dongles[i].mutex);
-		i++;
-	}
+	pthread_mutex_lock(&program->state_mutex);
+	stopped = program->stopped;
+	pthread_mutex_unlock(&program->state_mutex);
+	return (stopped);
 }
 
-void	destroy_program(t_program *program)
+void	stop_simulation(t_program *program)
 {
-	pthread_mutex_destroy(&program->state_mutex);
-	free(program->coders);
-	program->coders = NULL;
-	if (program->dongles)
-	{
-		destroy_dongles(program, program->config.number_of_coders);
-		free(program->dongles);
-		program->dongles = NULL;
-	}
+	pthread_mutex_lock(&program->state_mutex);
+	program->stopped = 1;
+	pthread_mutex_unlock(&program->state_mutex);
 }

@@ -17,7 +17,9 @@ SRC = src/main.c \
       src/logger.c \
       src/coder.c \
       src/coder_dongles.c \
-      src/threads.c
+      src/threads.c \
+      src/state.c \
+      src/monitor.c
 
 OBJ = $(SRC:.c=.o)
 

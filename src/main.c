@@ -6,7 +6,7 @@
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/18 02:58:58 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/07/29 22:24:41 by kbentes-         ###   ########.fr       */
+/*   Updated: 2026/07/31 20:17:19 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,13 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	print_program_info(&program);
-	if (create_threads(&program) == -1)
+	if (create_threads(&program) == -1 || create_monitor(&program) == -1)
 	{
 		print_error("failed to create threads");
 		destroy_program(&program);
 		return (1);
 	}
-	if (join_threads(&program) == -1)
+	if (join_threads(&program) == -1 || join_monitor(&program) == -1)
 	{
 		print_error("failed to join threads");
 		destroy_program(&program);

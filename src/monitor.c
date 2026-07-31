@@ -1,38 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   destroy.c                                          :+:      :+:    :+:   */
+/*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/18 04:26:07 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/07/31 19:46:12 by kbentes-         ###   ########.fr       */
+/*   Created: 2026/07/31 19:45:03 by kbentes-          #+#    #+#             */
+/*   Updated: 2026/07/31 19:45:04 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-void	destroy_dongles(t_program *program, int count)
+static int	all_compiled(t_program *program)
 {
 	int	i;
+	int	n;
+	int	required;
 
 	i = 0;
-	while (i < count)
+	n = program->config.number_of_coders;
+	required = program->config.number_of_compiles_required;
+	while (i < n)
 	{
-		pthread_mutex_destroy(&program->dongles[i].mutex);
+		if (program->coders[i].compiles_done < required)
+			return (0);
 		i++;
 	}
+	return (1);
 }
 
-void	destroy_program(t_program *program)
+void	*monitor_routine(void *arg)
 {
-	pthread_mutex_destroy(&program->state_mutex);
-	free(program->coders);
-	program->coders = NULL;
-	if (program->dongles)
+	t_program	*program;
+
+	program = (t_program *)arg;
+	while (!is_simulation_stopped(program))
 	{
-		destroy_dongles(program, program->config.number_of_coders);
-		free(program->dongles);
-		program->dongles = NULL;
+		if (all_compiled(program))
+			stop_simulation(program);
+		smart_sleep(1);
 	}
+	return (NULL);
 }
