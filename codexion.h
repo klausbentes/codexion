@@ -6,7 +6,7 @@
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/29 21:38:41 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/07/31 19:44:34 by kbentes-         ###   ########.fr       */
+/*   Updated: 2026/07/31 21:40:00 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,14 @@ typedef struct s_dongle
 
 typedef struct s_coder
 {
-	int			id;
-	int			compiles_done;
-	pthread_t	thread;
-	t_dongle	*left_dongle;
-	t_dongle	*right_dongle;
-	t_program	*program;
+	int				id;
+	int				compiles_done;
+	pthread_t		thread;
+	pthread_mutex_t	activity_mutex;
+	long long		last_compile_start;
+	t_dongle		*left_dongle;
+	t_dongle		*right_dongle;
+	t_program		*program;
 }	t_coder;
 
 typedef enum e_state
@@ -90,6 +92,8 @@ int			init_coders(t_program *program);
 int			init_program(t_program *program, t_config *config);
 
 /* destroy */
+void		destroy_dongles(t_program *program, int count);
+void		destroy_coders(t_program *program, int count);
 void		destroy_program(t_program *program);
 
 /* time */
@@ -104,6 +108,8 @@ void		log_event(t_program *program, int coder_id, t_state state);
 void		*coder_routine(void *arg);
 void		acquire_dongles(t_coder *coder);
 void		release_dongles(t_coder *coder);
+void		update_last_compile_start(t_coder *coder);
+long long	get_last_compile_start(t_coder *coder);
 
 /* state */
 int			is_simulation_stopped(t_program *program);

@@ -6,7 +6,7 @@
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/29 22:19:47 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/07/31 19:45:31 by kbentes-         ###   ########.fr       */
+/*   Updated: 2026/07/31 21:41:25 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 static void	do_compile(t_coder *coder)
 {
 	acquire_dongles(coder);
+	update_last_compile_start(coder);
 	log_event(coder->program, coder->id, STATE_COMPILING);
 	smart_sleep(coder->program->config.time_to_compile);
 	release_dongles(coder);

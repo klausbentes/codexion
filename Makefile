@@ -17,6 +17,7 @@ SRC = src/main.c \
       src/logger.c \
       src/coder.c \
       src/coder_dongles.c \
+      src/coder_activity.c \
       src/threads.c \
       src/state.c \
       src/monitor.c

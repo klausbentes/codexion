@@ -6,7 +6,7 @@
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/18 04:26:07 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/07/31 19:46:12 by kbentes-         ###   ########.fr       */
+/*   Updated: 2026/07/31 21:41:08 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,27 @@ void	destroy_dongles(t_program *program, int count)
 	}
 }
 
+void	destroy_coders(t_program *program, int count)
+{
+	int	i;
+
+	i = 0;
+	while (i < count)
+	{
+		pthread_mutex_destroy(&program->coders[i].activity_mutex);
+		i++;
+	}
+}
+
 void	destroy_program(t_program *program)
 {
 	pthread_mutex_destroy(&program->state_mutex);
-	free(program->coders);
-	program->coders = NULL;
+	if (program->coders)
+	{
+		destroy_coders(program, program->config.number_of_coders);
+		free(program->coders);
+		program->coders = NULL;
+	}
 	if (program->dongles)
 	{
 		destroy_dongles(program, program->config.number_of_coders);
