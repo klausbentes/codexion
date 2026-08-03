@@ -20,7 +20,11 @@ SRC = src/main.c \
       src/coder_activity.c \
       src/threads.c \
       src/state.c \
-      src/monitor.c
+      src/monitor.c \
+      src/heap.c \
+      src/heap_utils.c \
+      src/heap_pop.c \
+      src/dongle_schedule.c
 
 OBJ = $(SRC:.c=.o)
 

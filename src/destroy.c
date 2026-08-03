@@ -6,7 +6,7 @@
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/18 04:26:07 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/07/31 21:41:08 by kbentes-         ###   ########.fr       */
+/*   Updated: 2026/08/03 18:37:57 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ void	destroy_dongles(t_program *program, int count)
 	i = 0;
 	while (i < count)
 	{
+		heap_destroy(&program->dongles[i].queue);
+		pthread_cond_destroy(&program->dongles[i].cond);
 		pthread_mutex_destroy(&program->dongles[i].mutex);
 		i++;
 	}

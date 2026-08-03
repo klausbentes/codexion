@@ -6,7 +6,7 @@
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/29 21:38:41 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/07/31 21:40:00 by kbentes-         ###   ########.fr       */
+/*   Updated: 2026/08/03 18:36:05 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,28 @@ typedef struct s_config
 
 typedef struct s_program	t_program;
 
+typedef struct s_request
+{
+	int			coder_id;
+	long long	key;
+	long long	seq;
+}	t_request;
+
+typedef struct s_heap
+{
+	t_request	*items;
+	int			size;
+	int			capacity;
+}	t_heap;
+
 typedef struct s_dongle
 {
 	int				id;
 	pthread_mutex_t	mutex;
+	pthread_cond_t	cond;
+	int				locked;
+	long long		next_seq;
+	t_heap			queue;
 }	t_dongle;
 
 typedef struct s_coder
@@ -132,5 +150,19 @@ int			init_program(t_program *program, t_config *config);
 /* destroy */
 void		destroy_dongles(t_program *program, int count);
 void		destroy_program(t_program *program);
+
+/* heap */
+int			heap_init(t_heap *heap, int capacity);
+void		heap_destroy(t_heap *heap);
+void		heap_push(t_heap *heap, t_request request);
+t_request	heap_pop(t_heap *heap);
+int			heap_peek_id(t_heap *heap);
+void		swap_requests(t_request *a, t_request *b);
+int			request_less(t_request *a, t_request *b);
+
+/* dongle scheduling */
+long long	get_schedule_key(t_coder *coder);
+void		dongle_acquire(t_dongle *dongle, t_coder *coder, long long key);
+void		dongle_release(t_dongle *dongle);
 
 #endif
