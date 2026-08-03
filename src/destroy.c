@@ -6,7 +6,7 @@
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/18 04:26:07 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/08/03 18:37:57 by kbentes-         ###   ########.fr       */
+/*   Updated: 2026/08/03 19:09:13 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	destroy_coders(t_program *program, int count)
 
 void	destroy_program(t_program *program)
 {
+	pthread_mutex_destroy(&program->log_mutex);
 	pthread_mutex_destroy(&program->state_mutex);
 	if (program->coders)
 	{

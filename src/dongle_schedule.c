@@ -6,7 +6,7 @@
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/03 18:37:06 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/08/03 18:46:15 by kbentes-         ###   ########.fr       */
+/*   Updated: 2026/08/03 19:18:14 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,17 @@ static int	is_ready(t_dongle *dongle, t_coder *coder, long cooldown)
 	return (1);
 }
 
-static void	wait_turn(t_dongle *dongle, t_coder *coder, long cooldown)
+static int	wait_turn(t_dongle *dongle, t_coder *coder, long cooldown)
 {
 	struct timespec	ts;
 	long long		remaining;
 
-	while (!is_ready(dongle, coder, cooldown))
+	while (1)
 	{
+		if (is_simulation_stopped(coder->program))
+			return (-1);
+		if (is_ready(dongle, coder, cooldown))
+			return (0);
 		remaining = cooldown_remaining_ms(dongle, cooldown);
 		if (remaining > 0)
 		{
@@ -49,20 +53,27 @@ static void	wait_turn(t_dongle *dongle, t_coder *coder, long cooldown)
 	}
 }
 
-void	dongle_acquire(t_dongle *dongle, t_coder *coder,
+int	dongle_acquire(t_dongle *dongle, t_coder *coder,
 		long long key, long cooldown)
 {
 	t_request	req;
+	int			result;
 
 	pthread_mutex_lock(&dongle->mutex);
 	req.coder_id = coder->id;
 	req.key = key;
 	req.seq = dongle->next_seq++;
 	heap_push(&dongle->queue, req);
-	wait_turn(dongle, coder, cooldown);
-	heap_pop(&dongle->queue);
-	dongle->locked = 1;
+	result = wait_turn(dongle, coder, cooldown);
+	if (result == 0)
+	{
+		heap_pop(&dongle->queue);
+		dongle->locked = 1;
+	}
+	else
+		heap_remove_id(&dongle->queue, coder->id);
 	pthread_mutex_unlock(&dongle->mutex);
+	return (result);
 }
 
 void	dongle_release(t_dongle *dongle)

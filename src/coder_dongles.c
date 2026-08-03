@@ -6,7 +6,7 @@
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/30 22:17:21 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/08/03 18:46:22 by kbentes-         ###   ########.fr       */
+/*   Updated: 2026/08/03 19:21:38 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,37 +17,35 @@ static int	is_last_coder(t_coder *coder)
 	return (coder->id == coder->program->config.number_of_coders);
 }
 
-static void	acquire_in_order(t_dongle *first, t_dongle *second, t_coder *coder)
-{
-	long long	key;
-	long		cooldown;
-
-	key = get_schedule_key(coder);
-	cooldown = coder->program->config.dongle_cooldown;
-	dongle_acquire(first, coder, key, cooldown);
-	log_event(coder->program, coder->id, STATE_TAKEN_DONGLE);
-	dongle_acquire(second, coder, key, cooldown);
-	log_event(coder->program, coder->id, STATE_TAKEN_DONGLE);
-}
-
-static void	release_in_order(t_dongle *first, t_dongle *second)
-{
-	dongle_release(second);
-	dongle_release(first);
-}
-
-void	acquire_dongles(t_coder *coder)
+static void	get_dongle_order(t_coder *coder, t_dongle **first,
+		t_dongle **second)
 {
 	if (is_last_coder(coder))
-		acquire_in_order(coder->right_dongle, coder->left_dongle, coder);
+	{
+		*first = coder->right_dongle;
+		*second = coder->left_dongle;
+	}
 	else
-		acquire_in_order(coder->left_dongle, coder->right_dongle, coder);
+	{
+		*first = coder->left_dongle;
+		*second = coder->right_dongle;
+	}
+}
+
+int	acquire_dongles(t_coder *coder)
+{
+	t_dongle	*first;
+	t_dongle	*second;
+
+	get_dongle_order(coder, &first, &second);
+	return (acquire_pair(first, second, coder));
 }
 
 void	release_dongles(t_coder *coder)
 {
-	if (is_last_coder(coder))
-		release_in_order(coder->right_dongle, coder->left_dongle);
-	else
-		release_in_order(coder->left_dongle, coder->right_dongle);
+	t_dongle	*first;
+	t_dongle	*second;
+
+	get_dongle_order(coder, &first, &second);
+	release_pair(first, second);
 }

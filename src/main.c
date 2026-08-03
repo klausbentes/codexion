@@ -6,7 +6,7 @@
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/18 02:58:58 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/07/31 20:17:19 by kbentes-         ###   ########.fr       */
+/*   Updated: 2026/08/03 19:22:49 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,21 @@ static void	print_program_info(t_program *program)
 {
 	printf("Program initialized with %d coders and %d dongles\n",
 		program->config.number_of_coders, program->config.number_of_coders);
+}
+
+static int	run_simulation(t_program *program)
+{
+	if (create_threads(program) == -1 || create_monitor(program) == -1)
+	{
+		print_error("failed to create threads");
+		return (-1);
+	}
+	if (join_threads(program) == -1 || join_monitor(program) == -1)
+	{
+		print_error("failed to join threads");
+		return (-1);
+	}
+	return (0);
 }
 
 int	main(int argc, char **argv)
@@ -34,15 +49,8 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	print_program_info(&program);
-	if (create_threads(&program) == -1 || create_monitor(&program) == -1)
+	if (run_simulation(&program) == -1)
 	{
-		print_error("failed to create threads");
-		destroy_program(&program);
-		return (1);
-	}
-	if (join_threads(&program) == -1 || join_monitor(&program) == -1)
-	{
-		print_error("failed to join threads");
 		destroy_program(&program);
 		return (1);
 	}

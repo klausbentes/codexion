@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   logger.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kbentes- <kbentes-@student.42.rio>         +#+  +:+       +#+        */
+/*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/29 21:56:33 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/07/29 21:56:34 by kbentes-         ###   ########.fr       */
+/*   Updated: 2026/08/03 19:08:47 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,10 @@ void	log_event(t_program *program, int coder_id, t_state state)
 {
 	long long	elapsed;
 
+	if (is_simulation_stopped(program))
+		return ;
+	pthread_mutex_lock(&program->log_mutex);
 	elapsed = get_elapsed_ms(program->start_time);
 	printf("%lld %d %s\n", elapsed, coder_id, get_state_str(state));
+	pthread_mutex_unlock(&program->log_mutex);
 }

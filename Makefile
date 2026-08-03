@@ -17,6 +17,7 @@ SRC = src/main.c \
       src/logger.c \
       src/coder.c \
       src/coder_dongles.c \
+      src/coder_dongles_pair.c \
       src/coder_activity.c \
       src/threads.c \
       src/state.c \
@@ -24,7 +25,9 @@ SRC = src/main.c \
       src/heap.c \
       src/heap_utils.c \
       src/heap_pop.c \
+      src/heap_remove.c \
       src/dongle_schedule.c \
+      src/dongle_wake.c \
       src/dongle_cooldown.c
 
 OBJ = $(SRC:.c=.o)

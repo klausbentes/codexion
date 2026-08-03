@@ -6,7 +6,7 @@
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/29 21:38:41 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/08/03 19:02:13 by kbentes-         ###   ########.fr       */
+/*   Updated: 2026/08/03 19:17:14 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ struct s_program
 	long long		start_time;
 	pthread_t		monitor_thread;
 	pthread_mutex_t	state_mutex;
+	pthread_mutex_t	log_mutex;
 	int				stopped;
 };
 
@@ -126,10 +127,14 @@ void		log_event(t_program *program, int coder_id, t_state state);
 
 /* coder */
 void		*coder_routine(void *arg);
-void		acquire_dongles(t_coder *coder);
-void		release_dongles(t_coder *coder);
 void		update_last_compile_start(t_coder *coder);
 long long	get_last_compile_start(t_coder *coder);
+
+/* coder dongles */
+int			acquire_dongles(t_coder *coder);
+void		release_dongles(t_coder *coder);
+int			acquire_pair(t_dongle *first, t_dongle *second, t_coder *coder);
+void		release_pair(t_dongle *first, t_dongle *second);
 
 /* state */
 int			is_simulation_stopped(t_program *program);
@@ -159,6 +164,9 @@ void		heap_destroy(t_heap *heap);
 void		heap_push(t_heap *heap, t_request request);
 t_request	heap_pop(t_heap *heap);
 int			heap_peek_id(t_heap *heap);
+void		heap_remove_id(t_heap *heap, int coder_id);
+void		sift_up(t_heap *heap, int index);
+void		sift_down(t_heap *heap, int index);
 void		swap_requests(t_request *a, t_request *b);
 int			request_less(t_request *a, t_request *b);
 
@@ -170,9 +178,10 @@ void		ms_to_timespec(long long ms, struct timespec *ts);
 
 /* dongle scheduling */
 long long	get_schedule_key(t_coder *coder);
-void		dongle_acquire(t_dongle *dongle, t_coder *coder,
+int			dongle_acquire(t_dongle *dongle, t_coder *coder,
 				long long key, long cooldown);
 void		dongle_release(t_dongle *dongle);
+void		wake_all_dongles(t_program *program);
 
 /* dongle cooldown */
 long long	cooldown_remaining_ms(t_dongle *dongle, long cooldown);

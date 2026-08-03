@@ -6,7 +6,7 @@
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/03 18:36:32 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/08/03 18:36:34 by kbentes-         ###   ########.fr       */
+/*   Updated: 2026/08/03 19:17:37 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	heap_destroy(t_heap *heap)
 	heap->capacity = 0;
 }
 
-static void	sift_up(t_heap *heap, int index)
+void	sift_up(t_heap *heap, int index)
 {
 	int	parent;
 

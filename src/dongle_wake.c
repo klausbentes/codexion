@@ -1,31 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   state.c                                            :+:      :+:    :+:   */
+/*   dongle_wake.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/31 19:44:49 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/08/03 19:18:30 by kbentes-         ###   ########.fr       */
+/*   Created: 2026/08/03 19:18:21 by kbentes-          #+#    #+#             */
+/*   Updated: 2026/08/03 19:18:22 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-int	is_simulation_stopped(t_program *program)
+void	wake_all_dongles(t_program *program)
 {
-	int	stopped;
+	int	i;
+	int	n;
 
-	pthread_mutex_lock(&program->state_mutex);
-	stopped = program->stopped;
-	pthread_mutex_unlock(&program->state_mutex);
-	return (stopped);
-}
-
-void	stop_simulation(t_program *program)
-{
-	pthread_mutex_lock(&program->state_mutex);
-	program->stopped = 1;
-	pthread_mutex_unlock(&program->state_mutex);
-	wake_all_dongles(program);
+	i = 0;
+	n = program->config.number_of_coders;
+	while (i < n)
+	{
+		pthread_mutex_lock(&program->dongles[i].mutex);
+		pthread_cond_broadcast(&program->dongles[i].cond);
+		pthread_mutex_unlock(&program->dongles[i].mutex);
+		i++;
+	}
 }

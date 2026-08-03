@@ -6,13 +6,13 @@
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/03 18:36:47 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/08/03 18:36:48 by kbentes-         ###   ########.fr       */
+/*   Updated: 2026/08/03 19:17:48 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-static void	sift_down(t_heap *heap, int index)
+void	sift_down(t_heap *heap, int index)
 {
 	int	left;
 	int	right;
