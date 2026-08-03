@@ -6,7 +6,7 @@
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/29 21:38:41 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/08/03 18:36:05 by kbentes-         ###   ########.fr       */
+/*   Updated: 2026/08/03 19:02:13 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <limits.h>
 # include <sys/time.h>
 # include <pthread.h>
+# include <time.h>
 
 # define FIFO_SCHED 0
 # define EDF_SCHED 1
@@ -59,6 +60,7 @@ typedef struct s_dongle
 	pthread_cond_t	cond;
 	int				locked;
 	long long		next_seq;
+	long long		released_at;
 	t_heap			queue;
 }	t_dongle;
 
@@ -160,9 +162,19 @@ int			heap_peek_id(t_heap *heap);
 void		swap_requests(t_request *a, t_request *b);
 int			request_less(t_request *a, t_request *b);
 
+/* time */
+long long	get_time_ms(void);
+long long	get_elapsed_ms(long long start);
+void		smart_sleep(long long ms);
+void		ms_to_timespec(long long ms, struct timespec *ts);
+
 /* dongle scheduling */
 long long	get_schedule_key(t_coder *coder);
-void		dongle_acquire(t_dongle *dongle, t_coder *coder, long long key);
+void		dongle_acquire(t_dongle *dongle, t_coder *coder,
+				long long key, long cooldown);
 void		dongle_release(t_dongle *dongle);
+
+/* dongle cooldown */
+long long	cooldown_remaining_ms(t_dongle *dongle, long cooldown);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/18 04:24:37 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/08/03 18:37:45 by kbentes-         ###   ########.fr       */
+/*   Updated: 2026/08/03 18:46:54 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ static int	set_dongle(t_dongle *dongle, int id, int capacity)
 	dongle->id = id;
 	dongle->locked = 0;
 	dongle->next_seq = 0;
+	dongle->released_at = -1;
 	if (pthread_mutex_init(&dongle->mutex, NULL) != 0)
 		return (-1);
 	if (pthread_cond_init(&dongle->cond, NULL) != 0)
@@ -56,4 +57,3 @@ int	init_dongles(t_program *program)
 	}
 	return (0);
 }
-

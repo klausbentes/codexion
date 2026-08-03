@@ -6,7 +6,7 @@
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/30 22:17:21 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/08/03 18:37:25 by kbentes-         ###   ########.fr       */
+/*   Updated: 2026/08/03 18:46:22 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,13 @@ static int	is_last_coder(t_coder *coder)
 static void	acquire_in_order(t_dongle *first, t_dongle *second, t_coder *coder)
 {
 	long long	key;
+	long		cooldown;
 
 	key = get_schedule_key(coder);
-	dongle_acquire(first, coder, key);
+	cooldown = coder->program->config.dongle_cooldown;
+	dongle_acquire(first, coder, key, cooldown);
 	log_event(coder->program, coder->id, STATE_TAKEN_DONGLE);
-	dongle_acquire(second, coder, key);
+	dongle_acquire(second, coder, key, cooldown);
 	log_event(coder->program, coder->id, STATE_TAKEN_DONGLE);
 }
 

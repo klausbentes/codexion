@@ -24,7 +24,8 @@ SRC = src/main.c \
       src/heap.c \
       src/heap_utils.c \
       src/heap_pop.c \
-      src/dongle_schedule.c
+      src/dongle_schedule.c \
+      src/dongle_cooldown.c
 
 OBJ = $(SRC:.c=.o)
 

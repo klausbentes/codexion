@@ -1,31 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   time_utils.c                                       :+:      :+:    :+:   */
+/*   dongle_cooldown.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kbentes- <kbentes-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/29 21:18:43 by kbentes-          #+#    #+#             */
-/*   Updated: 2026/08/03 18:45:08 by kbentes-         ###   ########.fr       */
+/*   Created: 2026/08/03 18:45:18 by kbentes-          #+#    #+#             */
+/*   Updated: 2026/08/03 18:45:20 by kbentes-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "codexion.h"
 
-long long	get_elapsed_ms(long long start)
+long long	cooldown_remaining_ms(t_dongle *dongle, long cooldown)
 {
-	return (get_time_ms() - start);
-}
+	long long	elapsed;
 
-void	smart_sleep(long long ms)
-{
-	if (ms <= 0)
-		return ;
-	usleep(ms * 1000);
-}
-
-void	ms_to_timespec(long long ms, struct timespec *ts)
-{
-	ts->tv_sec = ms / 1000;
-	ts->tv_nsec = (ms % 1000) * 1000000;
+	if (dongle->released_at < 0)
+		return (0);
+	elapsed = get_time_ms() - dongle->released_at;
+	if (elapsed >= cooldown)
+		return (0);
+	return (cooldown - elapsed);
 }
